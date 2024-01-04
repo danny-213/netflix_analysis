@@ -28,11 +28,6 @@ In the command line:
 psql -U user_name -d database_name
 ```
 
-user_name : admin 
-
-database_name: postgres
-
-pw: 1
 
 There are 2 tools to use: 
 
