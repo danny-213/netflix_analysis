@@ -1,3 +1,4 @@
+![Netflix Background](./photo-1574375927938-d5a98e8ffe85.avif)
 # Netflix Shows Analysis
 
 Step by Step Guide to a Data Analysis Project: Uncovering Based on Genre
@@ -87,7 +88,7 @@ SELECT
 	SUM(CASE WHEN type = 'MOVIE' THEN 1 ELSE 0 END) AS movie_num
 FROM titles
 ```
-[Screen Shot 2024-01-04 at 11.18.03 AM.png](./Screen%20Shot%202024-01-04%20at%2011.43.20%20AM.png)
+![Screen Shot 2024-01-04 at 11.18.03 AM.png](./Screen%20Shot%202024-01-04%20at%2011.43.20%20AM.png)
 
 ```sql
 WITH unnested_genres  AS (
@@ -102,7 +103,7 @@ WHERE genre <> ''
 GROUP BY genre
 ORDER BY count DESC
 ```
-[Screen Shot 2024-01-04 at 11.46.03 AM.png](./Screen%20Shot%202024-01-04%20at%2011.46.46%20AM.png)
+![Screen Shot 2024-01-04 at 11.46.03 AM.png](./Screen%20Shot%202024-01-04%20at%2011.46.46%20AM.png)
 
 There are a total of 19 genres in the database with with 'drama', 'comedy' as the top available
 ```sql
@@ -115,4 +116,4 @@ WHERE "type" = 'MOVIE' AND imdb_score is not null
 ORDER BY imdb_score DESC
 ```
 
-[Screen Shot 2024-01-04 at 12.28.03 AM.png](./Screen%20Shot%202024-01-04%20at%2012.28.56%20PM.png)
+![Screen Shot 2024-01-04 at 12.28.03 AM.png](./Screen%20Shot%202024-01-04%20at%2012.28.56%20PM.png)
