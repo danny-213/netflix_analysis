@@ -137,15 +137,7 @@ ORDER BY imdb_score DESC
 ```
 ![Screen Shot 2024-01-04 at 12.28.56 PM.png](./Screen%20Shot%202024-01-04%20at%208.42.42%20PM.png)
 
-```sql
---top 5 shows by score
-SELECT title, 
-imdb_score,
-"type", genres, runtime
-FROM titles
-WHERE "type" = 'SHOW' AND imdb_score is not null
-ORDER BY imdb_score DESC
-```
+
 
 ### How many series, movies are published by decades?
 ```sql
@@ -158,3 +150,5 @@ WHERE title is not null
 GROUP BY decades
 ORDER BY decades
 ```
+![Screen Shot 2024-01-04 at 9.34.56 PM.png](./Screen%20Shot%202024-01-04%20at%209.34.53%20PM.png)
+
