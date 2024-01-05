@@ -28,12 +28,16 @@ There are 2 tools to use:
 - PSQL , which is like a command line, used to create table, import, copy records
 - the Query Tool to write SQL queries
 
-## Define tables and value types
+## Define tables and value types in the database
 
 **In the PSQL**
 
 ```sql
 CREATE TABLE titles (   id TEXT PRIMARY KEY,  title TEXT,  show_type TEXT,  description TEXT,  release_year INT,  age_certification TEXT,  runtime FLOAT,  genres TEXT,  production_countries TEXT,  seasons FLOAT,  imdb_id FLOAT,  imdb_score FLOAT,  imdb_votes FLOAT,  tmdb_popularity FLOAT,  tmdb_score FLOAT);
+```
+
+```sql
+CREATE TABLE credit (person_id INT, id TEXT,  "name" TEXT,  character TEXT, "role" TEXT);
 ```
 
 To change the data type of an existing table
@@ -54,6 +58,10 @@ ALTER TABLE titles ALTER COLUMN imdb_score TYPE TEXT
 ```sql
 \COPY titles FROM '/Users/admin/Documents/data analysis/netflix-shows/data/titles.csv' WITH ( FORMAT CSV, HEADER true, DELIMITER ',');
 
+```
+
+```sql
+\COPY credit FROM '/Users/admin/Documents/data analysis/netflix-shows/data/credits.csv' WITH ( FORMAT CSV, HEADER true, DELIMITER ',');
 ```
 
 Note: the ‘\’ backlash means operating on client-side psql
@@ -96,6 +104,7 @@ FROM titles
 ```
 ![Screen Shot 2024-01-04 at 11.18.03 AM.png](./Screen%20Shot%202024-01-04%20at%2011.43.20%20AM.png)
 
+### What genre is the most common?
 ```sql
 WITH unnested_genres  AS (
 SELECT unnest(regexp_split_to_array(
@@ -152,3 +161,75 @@ ORDER BY decades
 ```
 ![Screen Shot 2024-01-04 at 9.34.56 PM.png](./Screen%20Shot%202024-01-04%20at%209.34.53%20PM.png)
 
+### Average rating by release decades
+```sql
+-- number of movies, series by release_year
+SELECT CONCAT(FLOOR(release_year/10)*10,'s') as decades, 
+        ROUND(CAST(AVG(imdb_score) AS NUMERIC),2) as avg_score
+
+FROM titles
+WHERE title is not null
+GROUP BY decades
+ORDER BY avg_score
+```
+![Screen Shot 2024-01-04 at 3.36.56 PM.png](./Screen%20Shot%202024-01-05%20at%203.36.55%20AM.png)
+
+### Top 5 actors/ director by their in TV shows, movie average rating
+
+```sql
+--get average score for each actor
+WITH score_by_person AS(
+	-- average score by id
+	WITH id_score AS (
+		SELECT "id", ROUND(CAST(AVG(imdb_score) as numeric),2) as avg_score
+		FROM titles 
+		GROUP BY "id")
+	SELECT * FROM id_score
+	RIGHT JOIN credit
+	ON id_score.id = credit.id)
+SELECT "name", "role", ROUND(CAST(AVG(avg_score) as numeric),2) AS avg_score_by_person
+FROM score_by_person
+WHERE avg_score is not null and "role" = 'ACTOR'
+GROUP BY "name", "role"
+ORDER BY avg_score_by_person DESC
+LIMIT 5
+```
+![Screen Shot 2024-01-04 at 4.23.56 PM.png](./Screen%20Shot%202024-01-05%20at%204.23.50%20AM.png)
+```sql
+--get average score for each director
+WITH score_by_person AS(
+	-- average score by id
+	WITH id_score AS (
+		SELECT "id", ROUND(CAST(AVG(imdb_score) as numeric),2) as avg_score
+		FROM titles 
+		GROUP BY "id")
+	SELECT * FROM id_score
+	RIGHT JOIN credit
+	ON id_score.id = credit.id)
+SELECT "name", "role", ROUND(CAST(AVG(avg_score) as numeric),2) AS avg_score_by_person
+FROM score_by_person
+WHERE avg_score is not null and "role" = 'DIRECTOR'
+GROUP BY "name", "role"
+ORDER BY avg_score_by_person DESC
+```
+![Screen Shot 2024-01-04 at 4.22.56 PM.png](./Screen%20Shot%202024-01-05%20at%204.22.59%20AM.png)
+
+### Does runtime affect rating?
+<30 mins, 30-50,50-100,100-150,>150
+```sql
+-- rating by runtime
+SELECT (CASE 
+            WHEN runtime < 30 THEN '< 30 mins'
+            WHEN runtime < 50 THEN '30-50 mins'
+            WHEN runtime < 100 THEN '50-100 mins'
+            WHEN runtime < 150 THEN '100-150 mins'
+            ELSE '>150 mins'
+        END) as duration,
+        ROUND(CAST(AVG(imdb_score) AS numeric),2) as avg_score
+FROM titles
+GROUP BY duration
+ORDER BY avg_score
+```
+
+
+![Screen Shot 2024-01-04 at 4.241.56 PM.png](./Screen%20Shot%202024-01-05%20at%204.41.09%20AM.png)
