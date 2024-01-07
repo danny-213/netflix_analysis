@@ -9,6 +9,8 @@ Tool used: #PostgreSQL #Tableau
 
 [Tableau Interactive Dashboard](https://public.tableau.com/views/Netflix_dashboard_17046177347960/Netflix?:language=en-GB&publish=yes&:display_count=n&:origin=viz_share_link)
 
+[SQL Code](https://github.com/danny-213/netflix_analysis/blob/main/netflix_analysis.sql)
+
 **Business Problem:** To identify trends, audience taste by the type of shows, movies, genre, performers with high rating
 
 **How I Plan On Solving the Problem:** uncover key metrics such as viewer ratings, popularity trends, genre preferences, and viewership patterns. Once the data has been extracted and prepared, I will leverage Tableau to present the findings. 
