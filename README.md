@@ -9,7 +9,7 @@ Tool used: #PostgreSQL #Tableau
 
 [Tableau Interactive Dashboard](https://public.tableau.com/views/Netflix_dashboard_17046177347960/Netflix?:language=en-GB&publish=yes&:display_count=n&:origin=viz_share_link)
 
-[SQL Code](https://github.com/danny-213/netflix_analysis/blob/main/netflix_analysis.sql)
+[SQL Code](./netflix_analysis.sql)
 
 **Business Problem:** To identify trends, audience taste by the type of shows, movies, genre, performers with high rating
 
